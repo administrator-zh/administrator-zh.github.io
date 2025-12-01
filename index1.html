@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简易信息记录页（可新增）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 30px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        /* 新增记录表单 */
+        .add-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        input, textarea, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .submit-btn {
+            padding: 12px;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .submit-btn:hover {
+            background-color: #3182ce;
+        }
+        /* 记录列表 */
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .info-item {
+            padding: 18px;
+            border-left: 4px solid #4299e1;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .info-title {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .info-content {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .info-meta {
+            margin-top: 10px;
+            color: #718096;
+            font-size: 13px;
+            display: flex;
+            gap: 20px;
+        }
+        .delete-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .delete-btn:hover {
+            background-color: #c53030;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>信息记录存档（可新增/删除）</h1>
+        
+        <!-- 新增记录表单 -->
+        <div class="add-form">
+            <div class="form-group">
+                <label for="recordTitle">记录标题</label>
+                <input type="text" id="recordTitle" placeholder="输入记录标题（如“医学笔记”“任务清单”）">
+            </div>
+            <div class="form-group">
+                <label for="recordCategory">分类</label>
+                <select id="recordCategory">
+                    <option value="糖尿病">糖尿病</option>
+                    <option value="高血压">高血压</option>
+                    <option value="工具备忘">工具备忘</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="recordContent">记录内容</label>
+                <textarea id="recordContent" placeholder="输入详细内容（支持换行）"></textarea>
+            </div>
+            <button class="submit-btn" onclick="addRecord()">+ 提交新增记录</button>
+        </div>
+        
+        <!-- 信息记录列表 -->
+        <div class="info-list" id="recordList">
+            <!-- 记录会通过JS动态生成 -->
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时读取本地存储的记录并显示
+        window.onload = function() {
+            renderRecords();
+        };
+
+        // 新增记录
+        function addRecord() {
+            const title = document.getElementById('recordTitle').value.trim();
+            const category = document.getElementById('recordCategory').value;
+            const content = document.getElementById('recordContent').value.trim();
+
+            // 验证输入（标题和内容不能为空）
+            if (!title || !content) {
+                alert('标题和内容不能为空哦！');
+                return;
+            }
+
+            // 生成记录对象（含唯一ID和当前时间）
+            const record = {
+                id: Date.now(), // 用时间戳做唯一ID，避免重复
+                title: title,
+                category: category,
+                content: content,
+                time: new Date().toLocaleString() // 格式化当前时间（年月日时分秒）
+            };
+
+            // 从本地存储读取已有记录，没有则创建空数组
+            let records = JSON.parse(localStorage.getItem('infoRecords')) || [];
+            records.unshift(record); // 新记录放在最前面
+
+            // 保存到本地存储
+            localStorage.setItem('infoRecords', JSON.stringify(records));
+
+            // 重新渲染记录列表
+            renderRecords();
+
+            // 清空表单
+            document.getElementById('recordTitle').value = '';
+            document.getElementById('recordContent').value = '';
+        }
+
+        // 渲染所有记录
+        function renderRecords() {
+            const recordList = document.getElementById('recordList');
+            let records = JSON.parse(localStorage.getItem('infoRecords')) || [];
+
+            // 若没有记录，显示提示
+            if (records.length === 0) {
+                recordList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">暂无记录，快来新增一条吧～</div>';
+                return;
+            }
+
+            // 动态生成记录卡片
+            recordList.innerHTML = '';
+            records.forEach(record => {
+                const recordCard = document.createElement('div');
+                recordCard.className = 'info-item';
+                recordCard.innerHTML = `
+                    <div class="info-title">${record.title}</div>
+                    <div class="info-content">${record.content.replace(/\n/g, '<br>')}</div> <!-- 换行符转HTML换行 -->
+                    <div class="info-meta">
+                        <span>记录时间：${record.time}</span>
+                        <span>分类：${record.category}</span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteRecord(${record.id})">删除记录</button>
+                `;
+                recordList.appendChild(recordCard);
+            });
+        }
+
+        // 删除记录
+        function deleteRecord(id) {
+            if (confirm('确定要删除这条记录吗？')) {
+                let records = JSON.parse(localStorage.getItem('infoRecords')) || [];
+                // 过滤掉要删除的记录（保留ID不等于当前ID的）
+                records = records.filter(record => record.id !== id);
+                // 重新保存到本地存储
+                localStorage.setItem('infoRecords', JSON.stringify(records));
+                // 重新渲染
+                renderRecords();
+            }
+        }
+    </script>
+</body>
+</html>

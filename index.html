@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简易信息记录页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding: 30px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .info-item {
+            padding: 18px;
+            border-left: 4px solid #4299e1;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .info-title {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .info-content {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+        .info-meta {
+            margin-top: 10px;
+            color: #718096;
+            font-size: 13px;
+        }
+        /* 新增记录按钮样式（可选，仅视觉展示） */
+        .add-btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .add-btn:hover {
+            background-color: #3182ce;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>信息记录存档</h1>
+        
+        <!-- 信息记录列表 -->
+        <div class="info-list">
+            <!-- 记录1 -->
+            <div class="info-item">
+                <div class="info-title">医学笔记：人体免疫系统核心组成</div>
+                <div class="info-content">
+                    1. 免疫器官：骨髓（造血干细胞生成地）、胸腺（T细胞成熟）、淋巴结（免疫应答场所）；<br>
+                    2. 免疫细胞：T细胞（细胞免疫）、B细胞（体液免疫，产生抗体）、巨噬细胞（吞噬病原体）；<br>
+                    3. 免疫分子：抗体、细胞因子（调节免疫反应）、补体（辅助清除病原体）。
+                </div>
+                <div class="info-meta">记录时间：2024-10-20 | 分类：学习笔记</div>
+            </div>
+            
+            <!-- 记录2 -->
+            <div class="info-item">
+                <div class="info-title">编程工具：VS Code常用插件推荐</div>
+                <div class="info-content">
+                    - Live Server：实时预览HTML页面；<br>
+                    - Prettier：自动格式化代码；<br>
+                    - HTML CSS Support：HTML/CSS语法提示；<br>
+                    - GitLens：增强Git功能，查看代码提交记录。
+                </div>
+                <div class="info-meta">记录时间：2024-10-18 | 分类：工具备忘</div>
+            </div>
+            
+            <!-- 记录3 -->
+            <div class="info-item">
+                <div class="info-title">日常清单：本周重点任务</div>
+                <div class="info-content">
+                    1. 完成医学专业论文初稿；<br>
+                    2. 学习HTML/CSS进阶知识点；<br>
+                    3. 整理免疫学期末复习资料；<br>
+                    4. 部署个人信息记录网页到GitHub Pages。
+                </div>
+                <div class="info-meta">记录时间：2024-10-15 | 分类：任务规划</div>
+            </div>
+        </div>
+        
+        <!-- 新增记录按钮（仅视觉，静态页面无实际功能） -->
+        <button class="add-btn">+ 新增记录</button>
+    </div>
+</body>
+</html>
