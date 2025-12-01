@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBL资料收集存档页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f4f8;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #2d3748;
+            font-size: 22px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 10px;
+        }
+        .add-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            color: #2d3748;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        input, textarea, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .submit-btn {
+            padding: 12px;
+            background-color: #4299e1;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .submit-btn:hover {
+            background-color: #3182ce;
+        }
+        .filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 15px;
+            border: 1px solid #4299e1;
+            background: white;
+            color: #4299e1;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .filter-btn.active {
+            background: #4299e1;
+            color: white;
+        }
+        .data-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .data-item {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #4299e1;
+        }
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .data-title {
+            font-size: 18px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        .data-category {
+            padding: 4px 8px;
+            background-color: #e6f7ff;
+            color: #1890ff;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .data-meta {
+            display: flex;
+            gap: 20px;
+            color: #718096;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+        .data-content {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+        .data-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .delete-btn {
+            padding: 5px 10px;
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .delete-btn:hover {
+            background-color: #c53030;
+        }
+        .export-btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #38a169;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .export-btn:hover {
+            background-color: #2f855a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PBL资料收集存档（文献/动画素材/实验数据）</h1>
+        
+        <!-- 新增资料表单 -->
+        <div class="add-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dataTitle">资料名称</label>
+                    <input type="text" id="dataTitle" placeholder="输入资料名称（如“XX文献综述”“XX动画素材”）">
+                </div>
+                <div class="form-group">
+                    <label for="dataCategory">资料分类</label>
+                    <select id="dataCategory">
+                        <option value="文献">文献</option>
+                        <option value="动画素材">动画素材</option>
+                        <option value="实验数据">实验数据</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dataSource">资料来源</label>
+                    <input type="text" id="dataSource" placeholder="标注来源（如“知网/PubMed/XXX平台”）">
+                </div>
+                <div class="form-group">
+                    <label for="dataValidity">有效性</label>
+                    <select id="dataValidity">
+                        <option value="有效（核心文献/权威素材）">有效（核心文献/权威素材）</option>
+                        <option value="待验证（需进一步确认）">待验证（需进一步确认）</option>
+                        <option value="参考级（仅作辅助）">参考级（仅作辅助）</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dataContent">资料说明（关键信息/用途）</label>
+                <textarea id="dataContent" placeholder="输入资料的关键信息"></textarea>
+            </div>
+            <button class="submit-btn" onclick="addData()">+ 提交新增资料</button>
+        </div>
+        
+        <!-- 分类筛选按钮 -->
+        <div class="filter">
+            <button class="filter-btn active" onclick="filterData('全部')">全部资料</button>
+            <button class="filter-btn" onclick="filterData('文献')">文献</button>
+            <button class="filter-btn" onclick="filterData('动画素材')">动画素材</button>
+            <button class="filter-btn" onclick="filterData('实验数据')">实验数据</button>
+        </div>
+        
+        <!-- 资料列表 -->
+        <div class="data-list" id="dataList">
+            <!-- 资料会通过JS动态生成 -->
+        </div>
+
+        <!-- 导出资料来源表按钮 -->
+        <button class="export-btn" onclick="exportDataSource()">导出资料来源表（文本版）</button>
+    </div>
+
+    <script>
+        // 页面加载时渲染资料
+        window.onload = function() {
+            renderData();
+        };
+
+        // 新增资料
+        function addData() {
+            const title = document.getElementById('dataTitle').value.trim();
+            const category = document.getElementById('dataCategory').value;
+            const source = document.getElementById('dataSource').value.trim();
+            const validity = document.getElementById('dataValidity').value;
+            const content = document.getElementById('dataContent').value.trim();
+
+            if (!title || !source || !content) {
+                alert('资料名称、来源和说明不能为空哦！');
+                return;
+            }
+
+            const data = {
+                id: Date.now(),
+                title: title,
+                category: category,
+                source: source,
+                validity: validity,
+                content: content,
+                time: new Date().toLocaleString()
+            };
+
+            let dataList = JSON.parse(localStorage.getItem('pblData')) || [];
+            dataList.unshift(data);
+            localStorage.setItem('pblData', JSON.stringify(dataList));
+
+            renderData();
+            document.getElementById('dataTitle').value = '';
+            document.getElementById('dataSource').value = '';
+            document.getElementById('dataContent').value = '';
+        }
+
+        // 渲染资料
+        function renderData(filter = '全部') {
+            const dataList = document.getElementById('dataList');
+            let data = JSON.parse(localStorage.getItem('pblData')) || [];
+
+            if (filter !== '全部') {
+                data = data.filter(item => item.category === filter);
+            }
+
+            if (data.length === 0) {
+                dataList.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">暂无资料，快来新增一条吧～</div>';
+                return;
+            }
+
+            dataList.innerHTML = '';
+            data.forEach(item => {
+                const dataItem = document.createElement('div');
+                dataItem.className = 'data-item';
+                dataItem.innerHTML = `
+                    <div class="data-header">
+                        <div class="data-title">${item.title}</div>
+                        <div class="data-category">${item.category}</div>
+                    </div>
+                    <div class="data-meta">
+                        <span>来源：${item.source}</span>
+                        <span>有效性：${item.validity}</span>
+                        <span>添加时间：${item.time}</span>
+                    </div>
+                    <div class="data-content">${item.content.replace(/\n/g, '<br>')}</div>
+                    <div class="data-actions">
+                        <button class="delete-btn" onclick="deleteData(${item.id})">删除资料</button>
+                    </div>
+                `;
+                dataList.appendChild(dataItem);
+            });
+        }
+
+        // 筛选资料
+        function filterData(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.includes(category)) btn.classList.add('active');
+            });
+            renderData(category);
+        }
+
+        // 删除资料
+        function deleteData(id) {
+            if (confirm('确定要删除这条资料吗？')) {
+                let data = JSON.parse(localStorage.getItem('pblData')) || [];
+                data = data.filter(item => item.id !== id);
+                localStorage.setItem('pblData', JSON.stringify(data));
+                renderData(document.querySelector('.filter-btn.active').innerText.includes('全部') ? '全部' : document.querySelector('.filter-btn.active').innerText);
+            }
+        }
+
+        // 导出资料来源表
+        function exportDataSource() {
+            let data = JSON.parse(localStorage.getItem('pblData')) || [];
+            if (data.length === 0) {
+                alert('暂无资料可导出～');
+                return;
+            }
+
+            let exportText = 'PBL资料来源表\n\n';
+            data.forEach((item, index) => {
+                exportText += `【${index + 1}】资料名称：${item.title}\n`;
+                exportText += `分类：${item.category}\n`;
+                exportText += `来源：${item.source}\n`;
+                exportText += `有效性：${item.validity}\n`;
+                exportText += `关键说明：${item.content}\n`;
+                exportText += `添加时间：${item.time}\n`;
+                exportText += '-------------------------\n';
+            });
+
+            // 创建下载文件
+            const blob = new Blob([exportText], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'PBL资料来源表.txt';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+    </script>
+</body>
+</html>
